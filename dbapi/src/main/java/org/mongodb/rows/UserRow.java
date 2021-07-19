@@ -7,6 +7,11 @@ public class UserRow {
     private String username, Firstname, Lastname;
     private int charge;
 
+    public UserRow()
+    {
+
+    }
+
     public UserRow(String username, String firstname, String lastname, int charge) {
         this.username = username;
         Firstname = firstname;
@@ -17,7 +22,8 @@ public class UserRow {
     @Override
     public String toString() {
         return "UserRow{" +
-                "username='" + username + '\'' +
+                "id=" + id +
+                ", username='" + username + '\'' +
                 ", Firstname='" + Firstname + '\'' +
                 ", Lastname='" + Lastname + '\'' +
                 ", charge=" + charge +

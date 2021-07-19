@@ -7,6 +7,11 @@ public class ProductRow {
     private String name, category_name;
     private int price, remainingNumber, soldNumber;
 
+    public ProductRow()
+    {
+
+    }
+
     public ProductRow(String name, String category_name, int price, int remainingNumber, int soldNumber) {
         this.name = name;
         this.category_name = category_name;
@@ -18,7 +23,8 @@ public class ProductRow {
     @Override
     public String toString() {
         return "ProductRow{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", category_name='" + category_name + '\'' +
                 ", price=" + price +
                 ", remainingNumber=" + remainingNumber +

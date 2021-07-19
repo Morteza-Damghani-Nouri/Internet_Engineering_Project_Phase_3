@@ -6,6 +6,11 @@ public class CategoryRow {
     private ObjectId id;
     private String name;
 
+    public CategoryRow()
+    {
+
+    }
+
     public CategoryRow(String name) {
         this.name = name;
     }
@@ -28,10 +33,9 @@ public class CategoryRow {
 
     @Override
     public String toString() {
-        //TODO:all
         return "CategoryRow{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 '}';
     }
-
 }

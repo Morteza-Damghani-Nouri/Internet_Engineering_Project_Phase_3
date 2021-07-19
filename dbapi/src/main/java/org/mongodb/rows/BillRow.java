@@ -10,7 +10,8 @@ public class BillRow {
     @Override
     public String toString() {
         return "BillRow{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", userFirstname='" + userFirstname + '\'' +
                 ", userLastname='" + userLastname + '\'' +
                 ", address='" + address + '\'' +
@@ -19,6 +20,11 @@ public class BillRow {
                 ", price=" + price +
                 ", soldNumber=" + soldNumber +
                 '}';
+    }
+
+    public BillRow()
+    {
+
     }
 
     public BillRow(String name, String userFirstname, String userLastname, String address, String date, String trackingCode, int price, int soldNumber) {
