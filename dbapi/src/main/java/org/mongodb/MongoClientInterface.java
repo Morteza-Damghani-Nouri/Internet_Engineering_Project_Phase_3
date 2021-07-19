@@ -64,9 +64,9 @@ public class MongoClientInterface {
         MongoCollection<UserRow> collection = database.getCollection("Users",UserRow.class);
         FindIterable<UserRow> myDoc = collection.find(eq("username", "admin@am.sd"));
 
-        if(!myDoc.iterator().hasNext())
+        if(myDoc.first() == null)
         {
-            UserRow admin = new UserRow("admin@am.sd"," Amirreza","Damghani", 0, "WebIr123");
+            UserRow admin = new UserRow("admin@am.sd"," Amirreza","Damghani", 0, "WebIr123", "Tehran");
             collection.insertOne(admin);
         }
     }
@@ -75,9 +75,10 @@ public class MongoClientInterface {
     {
         MongoCollection<CategoryRow> collection = database.getCollection("Categories", CategoryRow.class);
         FindIterable<CategoryRow> categoryRows = collection.find(eq("name","unspecific"));
-        if(!categoryRows.iterator().hasNext())
+
+        if(categoryRows.first() == null)
         {
-            CategoryRow unspecific = new CategoryRow("Unspecific");
+            CategoryRow unspecific = new CategoryRow("unspecific");
             collection.insertOne(unspecific);
         }
     }

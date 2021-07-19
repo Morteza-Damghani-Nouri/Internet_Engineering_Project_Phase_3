@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 
 public class UserRow {
     private ObjectId id;
-    private String username, Firstname, Lastname, password;
+    private String username, Firstname, Lastname, password, address;
     private int charge;
 
     public UserRow()
@@ -12,12 +12,21 @@ public class UserRow {
 
     }
 
-    public UserRow(String username, String firstname, String lastname, int charge, String password) {
+    public UserRow(String username, String firstname, String lastname, int charge, String password, String address) {
         this.username = username;
         Firstname = firstname;
         Lastname = lastname;
         this.charge = charge;
         this.password = password;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPassword() {
@@ -31,10 +40,11 @@ public class UserRow {
     @Override
     public String toString() {
         return "UserRow{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
+                "username='" + username + '\'' +
                 ", Firstname='" + Firstname + '\'' +
                 ", Lastname='" + Lastname + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
                 ", charge=" + charge +
                 '}';
     }
