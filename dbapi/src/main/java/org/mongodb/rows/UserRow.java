@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 
 public class UserRow {
     private ObjectId id;
-    private String username, Firstname, Lastname;
+    private String username, Firstname, Lastname, password;
     private int charge;
 
     public UserRow()
@@ -12,11 +12,20 @@ public class UserRow {
 
     }
 
-    public UserRow(String username, String firstname, String lastname, int charge) {
+    public UserRow(String username, String firstname, String lastname, int charge, String password) {
         this.username = username;
         Firstname = firstname;
         Lastname = lastname;
         this.charge = charge;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

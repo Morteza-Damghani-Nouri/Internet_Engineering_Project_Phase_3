@@ -66,7 +66,7 @@ public class MongoClientInterface {
 
         if(!myDoc.iterator().hasNext())
         {
-            UserRow admin = new UserRow("admin@am.sd"," Amirreza","Damghani", 0);
+            UserRow admin = new UserRow("admin@am.sd"," Amirreza","Damghani", 0, "WebIr123");
             collection.insertOne(admin);
         }
     }
