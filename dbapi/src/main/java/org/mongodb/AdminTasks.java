@@ -44,15 +44,37 @@ public class AdminTasks {
         return false;
     }
 
-    public static void DeleteCategory(String categoryName)
+    public static boolean deleteCategory(String categoryName)
     {
-//        if(categoryName.equals("unspecific"))
-//            return false;
+        if(categoryName.equals("unspecific"))
+            return false;
+        MongoCollection<CategoryRow> collection = MongoClientInterface.getInstance().getCategoryCollection();
+        FindIterable<CategoryRow> categoryRows = collection.find(eq("name",categoryName));
+
+        if(categoryRows.first() == null)
+            return false;
+        collection.deleteMany(eq("name",categoryName));
+        MongoCollection<ProductRow> productCollection = MongoClientInterface.getInstance().getProductCollection();
+        productCollection.updateMany(eq("category_name", categoryName),set("category_name", "unspecific"));
+        return true;
     }
 
-    public static void ChangeCategoryName(String categoryName)
+    public static boolean changeCategoryName(String categoryName,String newName)
     {
+        if(categoryName.equals("unspecific"))
+            return false;
+        MongoCollection<CategoryRow> collection = MongoClientInterface.getInstance().getCategoryCollection();
+        FindIterable<CategoryRow> categoryRows = collection.find(eq("name",categoryName));
 
+        if(categoryRows.first() == null)
+            return false;
+        categoryRows = collection.find(eq("name",newName));
+        if(categoryRows.first() != null)
+            return false;
+        collection.updateOne(eq("name",categoryName),set("name",newName));
+        MongoCollection<ProductRow> productCollection = MongoClientInterface.getInstance().getProductCollection();
+        productCollection.updateMany(eq("category_name", categoryName),set("category_name",newName));
+        return true;
     }
 
     public static List<BillRow> getBills()
@@ -138,6 +160,10 @@ public class AdminTasks {
     {
         MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
         System.out.println(collection.find().into(new ArrayList<>()));
+        HashMap<String, String> productAsMap = new HashMap<>();
+        productAsMap.put("name", "Ahmad");
+        productAsMap.put("category_name","newC");
+
 
     }
 }
