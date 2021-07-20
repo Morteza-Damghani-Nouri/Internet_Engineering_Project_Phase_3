@@ -73,17 +73,38 @@ public class AdminTasks {
 
     public static List<BillRow> getBills()
     {
-        return new ArrayList<BillRow>();
+        return  MongoClientInterface.getInstance().getBillCollection().find().into(new ArrayList<>());
     }
 
-    public static BillRow getBills(String trackingCode)
+    public static BillRow getBill(int trackingCode)
     {
-        return new BillRow();
+        FindIterable<BillRow> myDoc = MongoClientInterface.getInstance().getBillCollection().find(eq("trackingCode", trackingCode));
+        return myDoc.first();
     }
 
-    public static void changeBillStatus(String trackingCode, String status)
+    public static boolean changeBillStatus(int trackingCode, String statusInText)
     {
-
+        BillRow billRow = getBill(trackingCode);
+        if(billRow == null)
+            return false;
+        BillRow.BillStatus status;
+        switch (statusInText)
+        {
+            case "IN_PROCESS":
+                status = BillRow.BillStatus.IN_PROCESS;
+                break;
+            case "DONE":
+                status = BillRow.BillStatus.DONE;
+                break;
+            case "CANCELED":
+                status = BillRow.BillStatus.CANCELED;
+                break;
+            default:
+                return false;
+        }
+        MongoCollection<BillRow> collection = MongoClientInterface.getInstance().getBillCollection();
+        collection.updateOne(eq("trackingCode", trackingCode),set("status",status.toString()));
+        return true;
     }
 
     public static boolean removeProduct(String name)

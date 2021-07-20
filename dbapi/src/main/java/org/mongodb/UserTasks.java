@@ -11,6 +11,7 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Sorts.*;
+
 public class UserTasks {
     private final String username;
     private FindIterable<ProductRow> productRowIterable;
@@ -22,6 +23,11 @@ public class UserTasks {
         setHigh(1000000);
         filterProductsBasedOnPrice();
         random = new Random();
+    }
+
+    public List<BillRow> getBills()
+    {
+        return  MongoClientInterface.getInstance().getBillCollection().find(eq("username",username)).into(new ArrayList<>());
     }
 
     public UserRow getUserRow()
@@ -139,17 +145,19 @@ public class UserTasks {
 //        userRow.setUsername("amir@aut.ac.ir");
 
         UserTasks user = new UserTasks("amir@aut.ac.ir");
-        user.charge(1500);
-        int x1 = user.buyProduct("ali", 1, new Date().toString());
-        System.out.println(x1);
-        int x7 = user.buyProduct("Card", 0, new Date().toString());
-        System.out.println(x7);
-        int x8 = user.buyProduct("Sim", 1, new Date().toString());
-        System.out.println(x8);
-        int x9 = user.buyProduct("Ice", 11, new Date().toString());
-        System.out.println(x9);
-        int x10 = user.buyProduct("Ice", 9, new Date().toString());
-        System.out.println(x10);
+        user.charge(15000);
+        System.out.println(user.getBills());
+//        int x8 = user.buyProduct("Sim", 1, new Date().toString());
+//        System.out.println(x8);
+//        int x9 = user.buyProduct("Card", 11, new Date().toString());
+//        System.out.println(x9);
+//        int x10 = user.buyProduct("Ice", 1, new Date().toString());
+//        System.out.println(x10);
+//        System.out.println(AdminTasks.getBills());
+//        System.out.println(AdminTasks.getBill(511288));
+//        boolean x11 = AdminTasks.changeBillStatus(511288,"DONE");
+//        System.out.println(x11);
+//        System.out.println(AdminTasks.getBills());
 //        boolean x2 = user.changeAccount(userAsMap);
 //        System.out.println(x2);
 //        userAsMap.replace("username","amir@aut.ac.ir");
