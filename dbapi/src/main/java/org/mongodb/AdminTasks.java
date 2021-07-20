@@ -1,18 +1,12 @@
 package org.mongodb;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
+import com.mongodb.client.*;
 import org.bson.Document;
-import org.mongodb.rows.BillRow;
-import org.mongodb.rows.CategoryRow;
-import org.mongodb.rows.ProductRow;
-import org.mongodb.rows.UserRow;
+import org.mongodb.rows.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class AdminTasks {
@@ -30,7 +24,7 @@ public class AdminTasks {
         return admin.getPassword().equals(password);
     }
 
-    public static boolean AddCategory(String categoryName)
+    public static boolean addCategory(String categoryName)
     {
         MongoCollection<CategoryRow> collection = MongoClientInterface.getInstance().getCategoryCollection();
         FindIterable<CategoryRow> categoryRows = collection.find(eq("name",categoryName));
@@ -122,7 +116,7 @@ public class AdminTasks {
 
         for(String key: productAsMap.keySet() )
         {
-            if (key.equals("name") || name.equals("category_name"))
+            if (key.equals("name") || name.equals("category_name") || name.equals("pictureAddress") || name.equals("dateAdded"))
                 collection.updateOne(eq("name",name),set(key, productAsMap.get(key)));
             else
                 collection.updateOne(eq("name",name),set(key, Integer.parseInt(productAsMap.get(key))));
@@ -163,7 +157,7 @@ public class AdminTasks {
         HashMap<String, String> productAsMap = new HashMap<>();
         productAsMap.put("name", "Ahmad");
         productAsMap.put("category_name","newC");
-
+//        removeProduct("Ahmad");
 
     }
 }

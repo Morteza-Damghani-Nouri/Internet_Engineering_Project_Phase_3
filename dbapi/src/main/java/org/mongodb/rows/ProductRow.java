@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class ProductRow {
     private ObjectId id;
-    private String name, category_name;
+    private String name, category_name, pictureAddress,dateAdded;
     private int price, remainingNumber, soldNumber;
 
     public ProductRow()
@@ -16,9 +16,11 @@ public class ProductRow {
         category_name = "";
     }
 
-    public ProductRow(String name, String category_name, int price, int remainingNumber, int soldNumber) {
+    public ProductRow(String name, String category_name, String pictureAddress, String dateAdded, int price, int remainingNumber, int soldNumber) {
         this.name = name;
         this.category_name = category_name;
+        this.pictureAddress = pictureAddress;
+        this.dateAdded = dateAdded;
         this.price = price;
         this.remainingNumber = remainingNumber;
         this.soldNumber = soldNumber;
@@ -31,6 +33,12 @@ public class ProductRow {
             switch (i) {
                 case "name":
                     product.setName(productAsMap.get(i));
+                    break;
+                case "pictureAddress":
+                    product.setPictureAddress(productAsMap.get(i));
+                    break;
+                case "dateAdded":
+                    product.setDateAdded(productAsMap.get(i));
                     break;
                 case "category_name":
                     product.setCategory_name(productAsMap.get(i));
@@ -60,10 +68,28 @@ public class ProductRow {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", category_name='" + category_name + '\'' +
+                ", pictureAddress='" + pictureAddress + '\'' +
+                ", dateAdded='" + dateAdded + '\'' +
                 ", price=" + price +
                 ", remainingNumber=" + remainingNumber +
                 ", soldNumber=" + soldNumber +
                 '}';
+    }
+
+    public String getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public String getPictureAddress() {
+        return pictureAddress;
+    }
+
+    public void setPictureAddress(String pictureAddress) {
+        this.pictureAddress = pictureAddress;
     }
 
     public ObjectId getId() {
