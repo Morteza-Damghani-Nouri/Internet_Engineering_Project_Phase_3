@@ -16,7 +16,7 @@ public class UserTasks {
     private final String username;
     private FindIterable<ProductRow> productRowIterable;
     private int low,high;
-    private Random random;
+    private final Random random;
     public UserTasks(String username) {
         this.username = username;
         setLow(0);
@@ -25,6 +25,10 @@ public class UserTasks {
         random = new Random();
     }
 
+    /**
+     * User : 5
+     * @return bills
+     */
     public List<BillRow> getBills()
     {
         return  MongoClientInterface.getInstance().getBillCollection().find(eq("username",username)).into(new ArrayList<>());
@@ -43,6 +47,11 @@ public class UserTasks {
         return user != null;
     }
 
+    /**
+     * User : 3
+     * @param userAsMap
+     * @return success
+     */
     public static boolean register(HashMap<String, String> userAsMap)
     {
         UserRow user = UserRow.getUserRowByHashMap(userAsMap);
@@ -55,6 +64,11 @@ public class UserTasks {
         return true;
     }
 
+    /**
+     * User : 4
+     * @param password
+     * @return success
+     */
     public boolean checkAuthentication(String password)
     {
         MongoCollection<UserRow> collection = MongoClientInterface.getInstance().getUserCollection();
@@ -62,6 +76,11 @@ public class UserTasks {
         return user != null && password.equals(user.getPassword());
     }
 
+    /**
+     * User : 4
+     * @param userAsMap
+     * @return success
+     */
     public boolean changeAccount(HashMap<String, String> userAsMap)
     {
         UserRow user = UserRow.getUserRowByHashMap(userAsMap);
@@ -77,6 +96,12 @@ public class UserTasks {
         }
         return true;
     }
+
+    /**
+     * User : 7
+     * @param amount
+     * @return success
+     */
     public boolean charge(int amount)
     {
         if(amount <= 0 || !existenceOfUser())
@@ -86,6 +111,14 @@ public class UserTasks {
         return true;
     }
 
+    /**
+     * User : 6
+     * User : 8
+     * @param name
+     * @param number
+     * @param date
+     * @return tracking Code
+     */
     public int buyProduct(String name, int number, String date)
     {
         MongoCollection<ProductRow> productCollection = MongoClientInterface.getInstance().getProductCollection();
@@ -116,12 +149,21 @@ public class UserTasks {
         return trackingCode;
     }
 
+    /**
+     * User : 2
+     */
     public void filterProductsBasedOnPrice()
     {
         MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
         productRowIterable = collection.find(and(gte("price", getLow()), lte("price", getHigh())));
     }
 
+    /**
+     * User : 1
+     * @param field
+     * @param sortType
+     * @return list of products
+     */
     public ArrayList<ProductRow> sortedBasedOnField(String field, boolean sortType)
     {
         HashMap<String,String> checker = new HashMap<>();

@@ -1,7 +1,6 @@
 package org.mongodb;
 
 import com.mongodb.client.*;
-import org.bson.Document;
 import org.mongodb.rows.*;
 
 import java.util.*;
@@ -10,6 +9,13 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class AdminTasks {
+
+    /**
+     * Admin : 0
+     * @param username
+     * @param password
+     * @return success
+     */
     public static boolean checkAuthentication(String username,String password)
     {
         if(!username.equals("admin@am.sd"))
@@ -24,6 +30,11 @@ public class AdminTasks {
         return admin.getPassword().equals(password);
     }
 
+    /**
+     * Admin : 3
+     * @param categoryName
+     * @return success
+     */
     public static boolean addCategory(String categoryName)
     {
         MongoCollection<CategoryRow> collection = MongoClientInterface.getInstance().getCategoryCollection();
@@ -38,6 +49,11 @@ public class AdminTasks {
         return false;
     }
 
+    /**
+     * Admin : 3
+     * @param categoryName
+     * @return success
+     */
     public static boolean deleteCategory(String categoryName)
     {
         if(categoryName.equals("unspecific"))
@@ -53,6 +69,12 @@ public class AdminTasks {
         return true;
     }
 
+    /**
+     * Admin : 3
+     * @param categoryName
+     * @param newName
+     * @return success
+     */
     public static boolean changeCategoryName(String categoryName,String newName)
     {
         if(categoryName.equals("unspecific"))
@@ -71,17 +93,32 @@ public class AdminTasks {
         return true;
     }
 
+    /**
+     * Admin : 2
+     * @return bills list
+     */
     public static List<BillRow> getBills()
     {
         return  MongoClientInterface.getInstance().getBillCollection().find().into(new ArrayList<>());
     }
 
+    /**
+     * Admin : 2
+     * @param trackingCode
+     * @return the bill
+     */
     public static BillRow getBill(int trackingCode)
     {
         FindIterable<BillRow> myDoc = MongoClientInterface.getInstance().getBillCollection().find(eq("trackingCode", trackingCode));
         return myDoc.first();
     }
 
+    /**
+     * Admin : 2
+     * @param trackingCode
+     * @param statusInText
+     * @return success
+     */
     public static boolean changeBillStatus(int trackingCode, String statusInText)
     {
         BillRow billRow = getBill(trackingCode);
@@ -107,6 +144,11 @@ public class AdminTasks {
         return true;
     }
 
+    /**
+     * Admin : 1
+     * @param name
+     * @return success
+     */
     public static boolean removeProduct(String name)
     {
         MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
@@ -117,6 +159,12 @@ public class AdminTasks {
         return true;
     }
 
+    /**
+     * Admin : 1
+     * @param name
+     * @param productAsMap
+     * @return success
+     */
     public static boolean changeProduct(String name, HashMap<String, String> productAsMap)
     {
         MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
@@ -148,6 +196,11 @@ public class AdminTasks {
         return true;
     }
 
+    /**
+     * Admin : 1
+     * @param productAsMap
+     * @return success
+     */
     public static boolean addProduct(HashMap<String, String> productAsMap)
     {
         ProductRow product = ProductRow.getProductRowByHashMap(productAsMap);
