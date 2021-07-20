@@ -5,7 +5,9 @@ import com.mongodb.client.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.mongodb.rows.BillRow;
 import org.mongodb.rows.CategoryRow;
+import org.mongodb.rows.ProductRow;
 import org.mongodb.rows.UserRow;
 
 import java.util.ArrayList;
@@ -24,11 +26,29 @@ public class MongoClientInterface {
         return instance;
     }
 
+    public MongoCollection<CategoryRow> getCategoryCollection()
+    {
+        return database.getCollection("Categories", CategoryRow.class);
+    }
+
+    public MongoCollection<UserRow> getUserCollection()
+    {
+        return database.getCollection("Users",UserRow.class);
+    }
+
+    public MongoCollection<BillRow> getBillCollection()
+    {
+        return database.getCollection("Bills", BillRow.class);
+    }
+
+    public MongoCollection<ProductRow> getProductCollection()
+    {
+        return database.getCollection("Products", ProductRow.class);
+    }
+
     public List<Document> getDatabases()
     {
 //        MongoDatabase database = mongoClient.getDatabase("School");
-        List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
-        databases.forEach(db -> System.out.println(db.toJson()));
 //        MongoCollection<Document> collection = database.getCollection("School");
 //        List collection2 = database.listCollectionNames().into(new ArrayList<String>());
 //        System.out.println(collection2.toString());
@@ -49,19 +69,20 @@ public class MongoClientInterface {
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
         database = mongoClient.getDatabase("WebDB").withCodecRegistry(pojoCodecRegistry);
-//        if(database.listCollectionNames().into())
-        database.getCollection("Bills");
-        database.getCollection("Categories");
-        database.getCollection("Products");
-        database.getCollection("Users");
         List collection2 = database.listCollectionNames().into(new ArrayList<String>());
         System.out.println(collection2.toString());
         System.out.println(database.getName());
     }
 
-    private void checkAndAddAdmin()
+    public static < E > E checkExistence(MongoCollection<E> collection, String fieldName, String value)
     {
-        MongoCollection<UserRow> collection = database.getCollection("Users",UserRow.class);
+        FindIterable<E> myDoc = collection.find(eq(fieldName, value));
+        return myDoc.first();
+    }
+
+    public void checkAndAddAdmin()
+    {
+        MongoCollection<UserRow> collection = getUserCollection();
         FindIterable<UserRow> myDoc = collection.find(eq("username", "admin@am.sd"));
 
         if(myDoc.first() == null)
@@ -73,7 +94,7 @@ public class MongoClientInterface {
 
     private void checkAndAddUnspecificCategory()
     {
-        MongoCollection<CategoryRow> collection = database.getCollection("Categories", CategoryRow.class);
+        MongoCollection<CategoryRow> collection = getCategoryCollection();
         FindIterable<CategoryRow> categoryRows = collection.find(eq("name","unspecific"));
 
         if(categoryRows.first() == null)

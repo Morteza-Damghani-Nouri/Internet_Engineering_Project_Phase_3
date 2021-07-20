@@ -2,6 +2,9 @@ package org.mongodb.rows;
 
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ProductRow {
     private ObjectId id;
     private String name, category_name;
@@ -9,7 +12,8 @@ public class ProductRow {
 
     public ProductRow()
     {
-
+        name = "";
+        category_name = "";
     }
 
     public ProductRow(String name, String category_name, int price, int remainingNumber, int soldNumber) {
@@ -18,6 +22,36 @@ public class ProductRow {
         this.price = price;
         this.remainingNumber = remainingNumber;
         this.soldNumber = soldNumber;
+    }
+
+    public static ProductRow getProductRowByHashMap(HashMap<String, String> productAsMap)
+    {
+        ProductRow product = new ProductRow();
+        for (String i : productAsMap.keySet()) {
+            switch (i) {
+                case "name":
+                    product.setName(productAsMap.get(i));
+                    break;
+                case "category_name":
+                    product.setCategory_name(productAsMap.get(i));
+                    break;
+                case "price":
+                    product.setPrice(Integer.parseInt(productAsMap.get(i)));
+                    break;
+                case "remainingNumber":
+                    product.setRemainingNumber(Integer.parseInt(productAsMap.get(i)));
+                    break;
+                case "soldNumber":
+                    product.setSoldNumber(Integer.parseInt(productAsMap.get(i)));
+                    break;
+                default:
+                    return null;
+            }
+        }
+        if(product.name.equals(""))
+            return null;
+
+        return product;
     }
 
     @Override

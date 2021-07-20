@@ -3,15 +3,21 @@ package org.mongodb.rows;
 import org.bson.types.ObjectId;
 
 public class BillRow {
+    public enum BillStatus{
+        IN_PROCESS,
+        DONE,
+        CANCELED
+    }
+
     private ObjectId id;
     private String name, userFirstname, userLastname, address, date, trackingCode;
     private int price, soldNumber;
+    BillStatus status;
 
     @Override
     public String toString() {
         return "BillRow{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", userFirstname='" + userFirstname + '\'' +
                 ", userLastname='" + userLastname + '\'' +
                 ", address='" + address + '\'' +
@@ -19,6 +25,7 @@ public class BillRow {
                 ", trackingCode='" + trackingCode + '\'' +
                 ", price=" + price +
                 ", soldNumber=" + soldNumber +
+                ", status=" + status +
                 '}';
     }
 
@@ -27,7 +34,7 @@ public class BillRow {
 
     }
 
-    public BillRow(String name, String userFirstname, String userLastname, String address, String date, String trackingCode, int price, int soldNumber) {
+    public BillRow(String name, String userFirstname, String userLastname, String address, String date, String trackingCode, int price, int soldNumber, BillStatus status) {
         this.name = name;
         this.userFirstname = userFirstname;
         this.userLastname = userLastname;
@@ -36,6 +43,7 @@ public class BillRow {
         this.trackingCode = trackingCode;
         this.price = price;
         this.soldNumber = soldNumber;
+        this.status = status;
     }
 
     public ObjectId getId() {
