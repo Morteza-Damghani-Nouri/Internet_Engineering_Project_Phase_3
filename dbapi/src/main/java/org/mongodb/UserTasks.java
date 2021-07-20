@@ -2,6 +2,7 @@ package org.mongodb;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import org.mongodb.rows.BillRow;
 import org.mongodb.rows.ProductRow;
 import org.mongodb.rows.UserRow;
 
@@ -14,11 +15,26 @@ public class UserTasks {
     private final String username;
     private FindIterable<ProductRow> productRowIterable;
     private int low,high;
+    private Random random;
     public UserTasks(String username) {
         this.username = username;
         setLow(0);
         setHigh(1000000);
         filterProductsBasedOnPrice();
+        random = new Random();
+    }
+
+    public UserRow getUserRow()
+    {
+        MongoCollection<UserRow> collection = MongoClientInterface.getInstance().getUserCollection();
+        return MongoClientInterface.checkExistence(collection, "username",username);
+    }
+
+    public boolean existenceOfUser()
+    {
+        MongoCollection<UserRow> collection = MongoClientInterface.getInstance().getUserCollection();
+        UserRow user = MongoClientInterface.checkExistence(collection, "username",username);
+        return user != null;
     }
 
     public static boolean register(HashMap<String, String> userAsMap)
@@ -55,6 +71,44 @@ public class UserTasks {
         }
         return true;
     }
+    public boolean charge(int amount)
+    {
+        if(amount <= 0 || !existenceOfUser())
+            return false;
+        MongoCollection<UserRow> collection = MongoClientInterface.getInstance().getUserCollection();
+        collection.updateOne(eq("username",username),inc("charge",amount));
+        return true;
+    }
+
+    public int buyProduct(String name, int number, String date)
+    {
+        MongoCollection<ProductRow> productCollection = MongoClientInterface.getInstance().getProductCollection();
+        MongoCollection<UserRow> userCollection = MongoClientInterface.getInstance().getUserCollection();
+        MongoCollection<BillRow> billCollection = MongoClientInterface.getInstance().getBillCollection();
+
+        ProductRow product = MongoClientInterface.checkExistence(productCollection, "name", name);
+        UserRow userRow = MongoClientInterface.checkExistence(userCollection, "username", username);
+        if(userRow == null || product == null || number < 1)
+            return -1;
+        if(number > product.getRemainingNumber() || number * product.getPrice() > userRow.getCharge())
+            return -1;
+
+        int trackingCode;
+        FindIterable<BillRow> myDoc;
+        do {
+            trackingCode = random.nextInt(1000000);
+            myDoc = billCollection.find(eq("trackingCode", trackingCode));
+        }while (myDoc.first() != null);
+
+        BillRow bill = new BillRow(product.getName(),userRow.getUsername(), userRow.getFirstname(), userRow.getLastname()
+                ,userRow.getAddress(), date ,trackingCode,product.getPrice(),number, BillRow.BillStatus.IN_PROCESS );
+
+        userCollection.updateOne(eq("username",username),inc("charge", -number * product.getPrice()));
+        productCollection.updateOne(eq("name",name), inc("soldNumber", number));
+        productCollection.updateOne(eq("name",name), inc("remainingNumber", -number));
+        billCollection.insertOne(bill);
+        return trackingCode;
+    }
 
     public void filterProductsBasedOnPrice()
     {
@@ -85,6 +139,17 @@ public class UserTasks {
 //        userRow.setUsername("amir@aut.ac.ir");
 
         UserTasks user = new UserTasks("amir@aut.ac.ir");
+        user.charge(1500);
+        int x1 = user.buyProduct("ali", 1, new Date().toString());
+        System.out.println(x1);
+        int x7 = user.buyProduct("Card", 0, new Date().toString());
+        System.out.println(x7);
+        int x8 = user.buyProduct("Sim", 1, new Date().toString());
+        System.out.println(x8);
+        int x9 = user.buyProduct("Ice", 11, new Date().toString());
+        System.out.println(x9);
+        int x10 = user.buyProduct("Ice", 9, new Date().toString());
+        System.out.println(x10);
 //        boolean x2 = user.changeAccount(userAsMap);
 //        System.out.println(x2);
 //        userAsMap.replace("username","amir@aut.ac.ir");

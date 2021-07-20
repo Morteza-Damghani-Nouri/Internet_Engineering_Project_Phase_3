@@ -10,34 +10,21 @@ public class BillRow {
     }
 
     private ObjectId id;
-    private String name, userFirstname, userLastname, address, date, trackingCode;
-    private int price, soldNumber;
+    private String name, username, firstname, lastname, address, date;
+    private int trackingCode, price, soldNumber;
     BillStatus status;
-
-    @Override
-    public String toString() {
-        return "BillRow{" +
-                "name='" + name + '\'' +
-                ", userFirstname='" + userFirstname + '\'' +
-                ", userLastname='" + userLastname + '\'' +
-                ", address='" + address + '\'' +
-                ", date='" + date + '\'' +
-                ", trackingCode='" + trackingCode + '\'' +
-                ", price=" + price +
-                ", soldNumber=" + soldNumber +
-                ", status=" + status +
-                '}';
-    }
 
     public BillRow()
     {
-
+        status = BillStatus.IN_PROCESS;
     }
 
-    public BillRow(String name, String userFirstname, String userLastname, String address, String date, String trackingCode, int price, int soldNumber, BillStatus status) {
+    public BillRow(String name, String username, String firstname, String lastname, String address, String date,
+                   int trackingCode, int price, int soldNumber, BillStatus status) {
         this.name = name;
-        this.userFirstname = userFirstname;
-        this.userLastname = userLastname;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.address = address;
         this.date = date;
         this.trackingCode = trackingCode;
@@ -62,20 +49,28 @@ public class BillRow {
         this.name = name;
     }
 
-    public String getUserFirstname() {
-        return userFirstname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserFirstname(String userFirstname) {
-        this.userFirstname = userFirstname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserLastname() {
-        return userLastname;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUserLastname(String userLastname) {
-        this.userLastname = userLastname;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getAddress() {
@@ -94,11 +89,11 @@ public class BillRow {
         this.date = date;
     }
 
-    public String getTrackingCode() {
+    public int getTrackingCode() {
         return trackingCode;
     }
 
-    public void setTrackingCode(String trackingCode) {
+    public void setTrackingCode(int trackingCode) {
         this.trackingCode = trackingCode;
     }
 
@@ -117,4 +112,30 @@ public class BillRow {
     public void setSoldNumber(int soldNumber) {
         this.soldNumber = soldNumber;
     }
+
+    public BillStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BillStatus status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "BillRow{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", address='" + address + '\'' +
+                ", date='" + date + '\'' +
+                ", trackingCode=" + trackingCode +
+                ", price=" + price +
+                ", soldNumber=" + soldNumber +
+                ", status=" + status +
+                '}';
+    }
+
 }
