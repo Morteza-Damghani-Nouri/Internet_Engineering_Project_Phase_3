@@ -226,14 +226,22 @@ public class AdminTasks {
 
     public static void test1()
     {
-        MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
-        System.out.println(collection.find().into(new ArrayList<>()));
-        HashMap<String, String> productAsMap = new HashMap<>();
-        addCategory("newC");
-        productAsMap.put("name", "Ahmad");
-        productAsMap.put("category_name","newC");
-        addProduct(productAsMap);
+//        MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
+//        System.out.println(collection.find().into(new ArrayList<>()));
+//        HashMap<String, String> productAsMap = new HashMap<>();
+//        addCategory("newC");
+//        productAsMap.put("name", "Ahmad");
+//        productAsMap.put("category_name","newC");
+//        addProduct(productAsMap);
 //        removeProduct("Ahmad");
-
+        boolean x1 = addCategory("first");
+        HashMap<String, String> product = new HashMap<>();
+        product.put("name","Ice1");
+        product.put("price","150");
+        product.put("pictureAddress", "Images/bag0.png");
+        product.put("category_name", "first");
+        boolean x2 = addProduct(product);
+        System.out.println(x1);
+        System.out.println(x2);
     }
 }
