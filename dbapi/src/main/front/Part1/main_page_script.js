@@ -2,7 +2,7 @@ let image_counter = 0;
 let products_array = [];
 let number_of_products_in_each_page = 15;
 let current_page = 1;
-
+console.log(window.localStorage.getItem("authToken"))
 function slides_show(){
     if(image_counter == 0){
         document.getElementById("clock_image").src = "Images/clock1.png";

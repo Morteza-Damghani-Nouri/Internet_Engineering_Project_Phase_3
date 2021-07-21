@@ -14,6 +14,9 @@ const error_type =
     INVALID_EMAIL_PATTERN : "invalid email pattern",
     EMPTY_INPUT : "empty input"
 };
+//console.log(window.localStorage.getItem(""));
+console.log(window.localStorage.getItem("authToken"))
+
 
 declare_type = [];
 const emails = {'amir@aut.ac.ir' : '1234567A', 'ahmad@gmail.com' : 'ALI1234512345',
@@ -236,22 +239,8 @@ function create_login_modal_content()
     let password = document.getElementById('login_password').value;
     let content_cell = document.getElementById('modal_content');
 
-    if(typeof emails[email] === 'undefined')
-    {
-        content_cell.innerText = "این ایمیل ثبت نشده است."
-        content_cell.style.color = "red"
-    }
-    else if(emails[email] == password)
-    {        
-        content_cell.innerText = "ورود با موفقیت انجام شد."
-        content_cell.style.color = "green"
-    }
-    else
-    {
-        content_cell.innerText = "رمز عبور نادرست است."
-        content_cell.style.color = "red"
-    }
     showResultForLogin(email, password, content_cell)
+
 
     return true;
 }
@@ -272,18 +261,31 @@ async function showResultForLogin(email, password, content_cell) {
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", link);
 
-//    const response = await fetch(link, {
-//        method: 'GET'
-//    });
     xhttp.onload = function() {
-        content_cell.innerText = this.responseText;
+        const result = JSON.parse(this.response);
+        console.log(this.response)
+        if(parseInt(result.authToken) > 0)
+        {
+            content_cell.innerText = "ورود با موفقیت انجام شد."
+            content_cell.style.color = "green"
+            window.localStorage.setItem("authToken", result.authToken);
+            console.log(window.localStorage.getItem("authToken"))
+            window.location.href = "../Part1/main_page.html"
+
+        }
+        else
+        {
+            content_cell.innerText = "رمز عبور و یا ایمیل نادرست است."
+            content_cell.style.color = "red"
+        }
     }
+
     xhttp.open("POST", link);
     xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
     xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
-    xhttp.setRequestHeader("Usecase", "Testing_Server");
+    xhttp.setRequestHeader("Usecase", "Login");
+    xhttp.setRequestHeader("username", email);
+    xhttp.setRequestHeader("password", password);
     xhttp.send();
-//    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//    xhttp.send("fname=" + email + "&lname=" + password);
 
 }
