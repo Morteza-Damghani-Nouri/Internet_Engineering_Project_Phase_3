@@ -5,6 +5,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.bson.Document;
+import org.mongodb.rows.ProductRow;
+import org.mongodb.rows.UserRow;
 
 import java.io.*;
 import java.net.*;
@@ -72,6 +74,25 @@ class MyHandler implements HttpHandler {
         a.put("authToken", token);
         return a.toJson();
     }
+    public static String getAllProductsCase(String base,String order)
+    {
+        out.println(base);
+        out.println(order);
+        UserTasks userTask = new UserTasks("unimportant");
+        userTask.setHigh((int) 1e9);
+        userTask.setLow(0);
+        Document a = new Document();
+        ArrayList<ProductRow> productRowArrayList= userTask.sortedBasedOnField(base, order.equals("0"));
+        int counter = 0;
+        for (ProductRow row:productRowArrayList)
+        {
+            a.append(String.valueOf(counter),row.toDocument());
+            counter += 1;
+        }
+        out.println("adkklwqjdf");
+        out.println(a.toJson());
+        return a.toJson();
+    }
 
     public static String parseHeaders(HashMap<String,LinkedList> request)
     {
@@ -79,6 +100,8 @@ class MyHandler implements HttpHandler {
         String username = null;
         String password = null;
         String categoryName = null;
+        String baseOnNameSort = null;
+        String sortType = null;
         int authToken = -1;
         HashMap <String,String> hashMap = new HashMap<>();
         out.println(request.keySet());
@@ -89,6 +112,13 @@ class MyHandler implements HttpHandler {
                     out.println(request.get(a));
                     out.println("useCase" + ": " + useCase);
                     break;
+                case "Basename":
+                    baseOnNameSort = request.get(a).get(0).toString();
+                    break;
+                case "Sorttype":
+                    sortType = request.get(a).get(0).toString();
+                    break;
+
                 case "Password":
                     password = request.get(a).get(0).toString();
                     hashMap.put("password",password);
@@ -143,6 +173,8 @@ class MyHandler implements HttpHandler {
             return loginCase(username,password);
         if(useCase.equals("Register"))
             return registerCase(username, hashMap);
+        if(useCase.equals("GetProduct"))
+            return getAllProductsCase(baseOnNameSort, sortType);
         return new Document().append("authToken", "0").toJson();
     }
 
