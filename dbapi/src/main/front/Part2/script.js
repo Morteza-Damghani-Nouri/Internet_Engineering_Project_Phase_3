@@ -210,19 +210,14 @@ function create_register_modal_content()
         if (declare_type[val] != error_type.GREEN_STATE)
             return false;
     let email = document.getElementById('register_email').value;
+    let password = document.getElementById('register_password').value;
+    let address = document.getElementById('register_address').value;
+    let first_name = document.getElementById('register_first_name').value;
+    let last_name = document.getElementById('register_last_name').value;
+
     let content_cell = document.getElementById('modal_content');
 
-    if(typeof emails[email] === 'undefined')
-    {
-        content_cell.innerText = "ثبت نام با موفقیت انجام شد."
-        content_cell.style.color = "green"
-    }
-    else
-    {
-        content_cell.innerText = "این ایمیل قبلا ثبت شده است."
-        content_cell.style.color = "red"
-    }
-
+    showResultForRegister(email, password, first_name, last_name, address, content_cell)
     return true;
 }
 
@@ -257,7 +252,7 @@ function get_out()
 }
 
 async function showResultForLogin(email, password, content_cell) {
-    let link = "http://127.0.0.1:8000/main/"
+    let link = "http://127.0.0.1:9950/main/"
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", link);
 
@@ -286,6 +281,43 @@ async function showResultForLogin(email, password, content_cell) {
     xhttp.setRequestHeader("Usecase", "Login");
     xhttp.setRequestHeader("username", email);
     xhttp.setRequestHeader("password", password);
+    xhttp.send();
+
+}
+
+async function showResultForRegister(email, password, firstname, lastname, address, content_cell) {
+    let link = "http://127.0.0.1:9950/main/"
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
+
+    xhttp.onload = function() {
+        const result = JSON.parse(this.response);
+        console.log(this.response)
+        if(parseInt(result.authToken) > 0)
+        {
+            content_cell.innerText = "ثبت نام با موفقیت انجام شد."
+            content_cell.style.color = "green"
+            window.localStorage.setItem("authToken", result.authToken);
+            console.log(window.localStorage.getItem("authToken"))
+            window.location.href = "../Part1/main_page.html"
+
+        }
+        else
+        {
+            content_cell.innerText = "اطلاعات ثبت نام غلط است."
+            content_cell.style.color = "red"
+        }
+    }
+
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "Register");
+    xhttp.setRequestHeader("username", email);
+    xhttp.setRequestHeader("password", password);
+    xhttp.setRequestHeader("firstname", firstname);
+    xhttp.setRequestHeader("lastname", lastname);
+    xhttp.setRequestHeader("address", address);
     xhttp.send();
 
 }

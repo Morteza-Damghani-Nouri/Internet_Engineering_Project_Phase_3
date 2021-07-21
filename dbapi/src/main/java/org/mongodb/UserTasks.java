@@ -17,12 +17,18 @@ public class UserTasks {
     private FindIterable<ProductRow> productRowIterable;
     private int low,high;
     private final Random random;
+    private boolean admin;
     public UserTasks(String username) {
         this.username = username;
         setLow(0);
         setHigh(1000000);
         filterProductsBasedOnPrice();
+        admin = false;
         random = new Random();
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 
     /**
@@ -73,6 +79,8 @@ public class UserTasks {
     {
         MongoCollection<UserRow> collection = MongoClientInterface.getInstance().getUserCollection();
         UserRow user = MongoClientInterface.checkExistence(collection, "username",username);
+        if(AdminTasks.checkAuthentication(username, password))
+            admin = true;
         return user != null && password.equals(user.getPassword());
     }
 
@@ -179,16 +187,16 @@ public class UserTasks {
 
     public static void test2()
     {
-        HashMap<String, String> userAsMap = new HashMap<>();
-        userAsMap.put("username","x@aut.ac.ir");
-        userAsMap.put("firstname","Amirreza");
-        userAsMap.put("lastname","Shirmast");
+//        HashMap<String, String> userAsMap = new HashMap<>();
+//        userAsMap.put("username","x@aut.ac.ir");
+//        userAsMap.put("firstname","Amirreza");
+//        userAsMap.put("lastname","Shirmast");
 
 //        userRow.setUsername("amir@aut.ac.ir");
 
-        UserTasks user = new UserTasks("amir@aut.ac.ir");
-        user.charge(15000);
-        System.out.println(user.getBills());
+//        UserTasks user = new UserTasks("amir@aut.ac.ir");
+//        user.charge(15000);
+//        System.out.println(user.getBills());
 //        int x8 = user.buyProduct("Sim", 1, new Date().toString());
 //        System.out.println(x8);
 //        int x9 = user.buyProduct("Card", 11, new Date().toString());
@@ -224,10 +232,10 @@ public class UserTasks {
 //        product.replace("price","130");
 //        product.put("category_name","All");
 //        AdminTasks.addProduct(product);
-        System.out.println(user.sortedBasedOnField("price",false));
-        user.setHigh(1000);
-        System.out.println(user.sortedBasedOnField("name",true));
-        System.out.println(user.sortedBasedOnField("category_name",false));
+//        System.out.println(user.sortedBasedOnField("price",false));
+//        user.setHigh(1000);
+//        System.out.println(user.sortedBasedOnField("name",true));
+//        System.out.println(user.sortedBasedOnField("category_name",false));
 
     }
 
