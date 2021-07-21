@@ -229,8 +229,10 @@ public class AdminTasks {
         MongoCollection<ProductRow> collection = MongoClientInterface.getInstance().getProductCollection();
         System.out.println(collection.find().into(new ArrayList<>()));
         HashMap<String, String> productAsMap = new HashMap<>();
+        addCategory("newC");
         productAsMap.put("name", "Ahmad");
         productAsMap.put("category_name","newC");
+        addProduct(productAsMap);
 //        removeProduct("Ahmad");
 
     }
