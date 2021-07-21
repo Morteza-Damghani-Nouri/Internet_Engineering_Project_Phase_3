@@ -1,13 +1,13 @@
 package org.mongodb.rows;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductRow {
     private ObjectId id;
-    private String name, category_name, pictureAddress,dateAdded;
+    private String name, category_name, pictureAddress, dateAdded;
     private int price, remainingNumber, soldNumber;
 
     public ProductRow()
@@ -138,5 +138,14 @@ public class ProductRow {
 
     public void setSoldNumber(int soldNumber) {
         this.soldNumber = soldNumber;
+    }
+
+    public Document toDocument() {
+        Document a = new Document();
+        a.append("0", getPictureAddress());
+        a.append("1", getPrice());
+        a.append("2", getCategory_name());
+        a.append("3", getName());
+        return a;
     }
 }
