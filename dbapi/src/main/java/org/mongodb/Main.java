@@ -3,6 +3,7 @@ package org.mongodb;
 import com.mongodb.client.*;
 import org.bson.Document;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -12,5 +13,6 @@ public class Main {
         databases.forEach(db -> System.out.println(db.toString()));
         AdminTasks.test1();
         UserTasks.test2();
+        ServerForLogin.runServer();
     }
 }
