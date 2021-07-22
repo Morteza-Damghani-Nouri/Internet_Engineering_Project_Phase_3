@@ -52,20 +52,12 @@ function get_products()
             }
 
 
-
-
-
-
-
-
-
             if (result[i][3].includes("mountain_climbing_bag")) {
                 temp.push("کوله پشتی کوه نوردی");
             }
             let template = temp[1];
             temp[1] = temp[3];
             temp[3] = template;
-            console.log(temp);
             products_array.push(temp);
 
         }
@@ -78,12 +70,89 @@ function get_products()
     xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
     xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
     xhttp.setRequestHeader("Usecase", "GetProduct");
-    xhttp.setRequestHeader("BaseName", "name"); // or pictureAddress or Category_name
+    xhttp.setRequestHeader("BaseName", "dateAdded"); // or pictureAddress or Category_name
     xhttp.setRequestHeader("SortType", "0"); // or 1
     xhttp.send();
 
 
 }
+
+function price_sorter() {
+    products_array = []
+    let link = "http://127.0.0.1:9950/main/";
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
+
+    xhttp.onload = function() {
+        const result = JSON.parse(this.response);
+        console.log(this.response);
+        console.log(result);
+
+        for(let i = 0; i < 45; ++i) {
+            let temp = [];
+            temp.push(result[i][0]);
+            if(result[i][1].toString().includes("2")) {
+                temp.push("۲۰۰۰۰۰ تومان");
+            }
+            else {
+                if(result[i][1].toString().includes("5")) {
+                    temp.push("۱۵۰۰۰۰ تومان");
+
+
+                }
+                else {
+                    if(result[i][1].toString().includes("7")) {
+                        temp.push("۱۷۰۰۰۰ تومان");
+
+
+
+                    }
+                }}
+
+            if(result[i][2] == "first") {
+                temp.push("دسته بندی یک")
+
+            }
+            if(result[i][2] == "second") {
+                temp.push("دسته بندی دو")
+
+            }
+            if(result[i][2] == "third") {
+                temp.push("دسته بندی سه")
+
+            }
+
+
+            if (result[i][3].includes("mountain_climbing_bag")) {
+                temp.push("کوله پشتی کوه نوردی");
+            }
+            let template = temp[1];
+            temp[1] = temp[3];
+            temp[3] = template;
+            products_array.push(temp);
+
+        }
+        slides_show();
+        products_renderer(current_page);
+        paging_controller();
+
+    }
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "GetProduct");
+    xhttp.setRequestHeader("BaseName", "price"); // or pictureAddress or Category_name
+    xhttp.setRequestHeader("SortType", "0"); // or 1
+    xhttp.send();
+
+}
+
+
+
+
+
+
+
 
 function slides_show(){
     if(image_counter == 0){
