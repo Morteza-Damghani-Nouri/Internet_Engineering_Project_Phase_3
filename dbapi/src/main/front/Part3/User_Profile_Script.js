@@ -54,6 +54,13 @@ async function charge()
     xhttp.send();
 }
 
+
+async function logout()
+{
+    window.localStorage.setItem("authToken","0")
+    window.location.href = "../Part1/main_page.html"
+}
+
 function tabs_handler() {
     document.getElementById("main_div2").style.display = "none";
 
