@@ -24,7 +24,7 @@
     <div class="dropdown" dir="ltr">
         <!-- <button type="button" id="menu_button"> ورود / ثبت نام </button> -->
 
-        <button class="dropbtn">هادی</button>
+        <button class="dropbtn" id ="drobptn">هادی</button>
         <div class="dropdown-content">
             <div class="dd_content">پروفایل</div>
             <div class="dd_content" id="last_content">خروج از حساب</div>
@@ -38,9 +38,13 @@
     <div id="main_div1">
         <!-- The main part of this page containe -->
         <div id="title">
-            <div id="welcome_message1">هادی عزیز، خوش آمدید |</div>
-            <div id="user_deposit">موجودی حساب شما: ۱۰/۰۰۰</div>
-            <button id="raise_deposit_button">افزایش موجودی</button>
+            <div id="welcome_message1">
+                <label id = "welcomeName"></label>
+                عزیز، خوش آمدید |</div>
+            <div id="user_deposit">موجودی حساب شما:
+                <label id = "cash"></label>
+            </div>
+            <button id="raise_deposit_button" onclick="charge()">افزایش موجودی</button>
 
         </div>
         <br/>
@@ -82,15 +86,11 @@
             </tr>
 
             <tr>
-                <td><label class="lables">ایمیل</label></td>
-                <td><input oninput = "change_on_input(this)" onfocusout="clear_value_from_white_space(this)" type="text"
-                           id="register_email" class="text_input" placeholder=" ایمیل خود را وارد کنید ..."></td>
-                <td><label class="few_distance_lables"></label></td>
                 <td><label class="lables">رمز عبور</label></td>
-                <td>
+                <th colspan="4">
                     <input oninput = "change_on_input(this)" onfocusout="clear_value_from_white_space(this)" type="password"
-                           id="register_password" class="text_input" placeholder=" رمز عبور خود را وارد کنید ...">
-                </td>
+                           id="register_password" class="password_input" placeholder=" رمز عبور خود را وارد کنید ...">
+                </th>
             </tr>
 
             <tr>
@@ -139,7 +139,7 @@
 
     <div id="main_div2">
         <div id="welcome_message2">
-            <div id="username">هادی</div>
+            <div id="username"></div>
             <div> عزیز، خوش آمدید</div>
 
         </div>

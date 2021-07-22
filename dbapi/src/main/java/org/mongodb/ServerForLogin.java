@@ -1,16 +1,12 @@
 package org.mongodb;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
 import org.bson.Document;
 import org.mongodb.rows.ProductRow;
 import org.mongodb.rows.UserRow;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,6 +40,8 @@ class MyHandler implements HttpHandler {
         if (username == null || password == null) {
             return new Document().append("authToken", "0").toJson();
         }
+        out.println(username);
+        out.println(password);
         Random random = new Random();
         int token = random.nextInt(10000000);
         token += 3;
@@ -94,6 +92,43 @@ class MyHandler implements HttpHandler {
         return a.toJson();
     }
 
+
+    private static String changeInfoCase(int authToken, HashMap<String, String> hashMap)
+    {
+        out.println(ServerForLogin.tokens.keySet());
+        if(!ServerForLogin.tokens.containsKey(authToken))
+            return new Document().append("authToken", "0").toJson();
+        UserTasks user = ServerForLogin.tokens.get(authToken);
+        hashMap.put("username",user.getUserRow().getUsername());
+        out.println(user.getUserRow().getUsername());
+        Document a = new Document();
+        a.put("authToken", authToken);
+        if(user.changeAccount(hashMap))
+            return a.toJson();
+        return new Document().append("authToken", "0").toJson();
+    }
+
+    private static String getUserInfoCase(int authToken) {
+        if(!ServerForLogin.tokens.containsKey(authToken))
+            return new Document().append("authToken", "0").toJson();
+        UserTasks user = ServerForLogin.tokens.get(authToken);
+        Document a = new Document();
+        a.put("authToken", authToken);
+        a.put("firstname",user.getUserRow().getFirstname());
+        a.put("lastname",user.getUserRow().getLastname());
+        a.put("address",user.getUserRow().getAddress());
+        a.put("charge",user.getUserRow().getCharge());
+        return a.toJson();
+    }
+
+    private static String ChargeCase(int authToken) {
+        if(!ServerForLogin.tokens.containsKey(authToken))
+            return new Document().append("authToken", "0").toJson();
+        UserTasks user = ServerForLogin.tokens.get(authToken);
+        user.charge(1000000);
+        return "";
+    }
+
     public static String parseHeaders(HashMap<String,LinkedList> request)
     {
         String useCase = null;
@@ -136,17 +171,17 @@ class MyHandler implements HttpHandler {
                 case "Address":
                     hashMap.put("address", request.get(a).get(0).toString());
                     break;
-                case "AuthToken":
+                case "Authtoken":
                     authToken = Integer.parseInt(request.get(a).get(0).toString());
                     out.println("authToken" + ": " + authToken);
                     break;
                 case "Name":
                     hashMap.put("name", request.get(a).get(0).toString());
                     break;
-                case "PictureAddress":
+                case "Pictureaddress":
                     hashMap.put("pictureAddress", request.get(a).get(0).toString());
                     break;
-                case "DateAdded":
+                case "Dateadded":
                     hashMap.put("dateAdded", request.get(a).get(0).toString());
                     break;
                 case "Category_name":
@@ -156,10 +191,10 @@ class MyHandler implements HttpHandler {
                 case "Price":
                     hashMap.put("price", request.get(a).get(0).toString());
                     break;
-                case "RemainingNumber":
+                case "Remainingnumber":
                     hashMap.put("remainingNumber", request.get(a).get(0).toString());
                     break;
-                case "SoldNumber":
+                case "Soldnumber":
                     hashMap.put("soldNumber", request.get(a).get(0).toString());
                     break;
                 default:
@@ -175,8 +210,16 @@ class MyHandler implements HttpHandler {
             return registerCase(username, hashMap);
         if(useCase.equals("GetProduct"))
             return getAllProductsCase(baseOnNameSort, sortType);
+        if(useCase.equals("changeinfo"))
+            return changeInfoCase(authToken, hashMap);
+        if(useCase.equals("Getuserinfo"))
+            return getUserInfoCase(authToken);
+        if(useCase.equals("Chargemoney"))
+            return ChargeCase(authToken);
+
         return new Document().append("authToken", "0").toJson();
     }
+
 
     @Override
     public void handle(HttpExchange t) throws IOException {
