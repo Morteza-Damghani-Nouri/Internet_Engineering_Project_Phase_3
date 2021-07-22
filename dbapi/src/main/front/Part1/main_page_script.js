@@ -78,7 +78,7 @@ function get_products()
 }
 
 function price_sorter() {
-    products_array = []
+    products_array = [];
     let link = "http://127.0.0.1:9950/main/";
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", link);
@@ -184,11 +184,18 @@ function paging_controller() {
     if(current_page == 1) {
         document.getElementById("previous_page_button").style.display = "none";
         document.getElementById("next_page_button").style.display = "block";
+        if(current_page * number_of_products_in_each_page == products_array.length) {
+            document.getElementById("next_page_button").style.display = "none";
+
+        }
+
+
+
     }
     else {
         let temp1 = current_page;
         ++temp1;
-        if ((temp1 - 1) * number_of_products_in_each_page >= 45) {
+        if ((temp1 - 1) * number_of_products_in_each_page >= products_array.length) {
             document.getElementById("next_page_button").style.display = "none";
             document.getElementById("previous_page_button").style.display = "block";
         }
@@ -202,7 +209,7 @@ function paging_controller() {
 
 
     for(let temp = 1;temp <= 8; ++temp) {
-        if ((temp - 1) * number_of_products_in_each_page < 45) {
+        if ((temp - 1) * number_of_products_in_each_page < products_array.length) {
             let index = temp.toString();
             let visible_page_number = document.getElementById("page" + index);
             visible_page_number.style.borderStyle = "wave";
@@ -232,9 +239,319 @@ function paging_controller() {
 
 }
 
+function category_sorter() {
+    products_array = [];
+    let first_category_element = document.getElementsByName("first_category")[0];
+    let second_category_element = document.getElementsByName("second_category")[0];
+    let third_category_element = document.getElementsByName("third_category")[0];
+    let forth_category_element = document.getElementsByName("forth_category")[0];
+
+    if(first_category_element.checked) {
+        let link = "http://127.0.0.1:9950/main/";
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", link);
+
+        xhttp.onload = function() {
+            const result = JSON.parse(this.response);
+            console.log(this.response);
+            console.log(result);
+
+            for(let i = 0; i < 45; ++i) {
+                if(result[i][2] == "first"){
+                    let temp = [];
+                    temp.push(result[i][0]);
+                    if(result[i][1].toString().includes("2")) {
+                        temp.push("۲۰۰۰۰۰ تومان");
+                    }
+                    else {
+                        if(result[i][1].toString().includes("5")) {
+                            temp.push("۱۵۰۰۰۰ تومان");
+
+
+                        }
+                        else {
+                            if(result[i][1].toString().includes("7")) {
+                                temp.push("۱۷۰۰۰۰ تومان");
+
+
+
+                            }
+                        }}
+
+                    if(result[i][2] == "first") {
+                        temp.push("دسته بندی یک")
+
+                    }
+                    if(result[i][2] == "second") {
+                        temp.push("دسته بندی دو")
+
+                    }
+                    if(result[i][2] == "third") {
+                        temp.push("دسته بندی سه")
+
+                    }
+
+
+                    if (result[i][3].includes("mountain_climbing_bag")) {
+                        temp.push("کوله پشتی کوه نوردی");
+                    }
+                    let template = temp[1];
+                    temp[1] = temp[3];
+                    temp[3] = template;
+                    products_array.push(temp);
+
+                }
+
+            }
+            slides_show();
+            products_renderer(current_page);
+            paging_controller();
+
+        }
+        xhttp.open("POST", link);
+        xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+        xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+        xhttp.setRequestHeader("Usecase", "GetProduct");
+        xhttp.setRequestHeader("BaseName", "price"); // or pictureAddress or Category_name
+        xhttp.setRequestHeader("SortType", "0"); // or 1
+        xhttp.send();
+
+    }
+    if(second_category_element.checked) {
+        let link = "http://127.0.0.1:9950/main/";
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", link);
+
+        xhttp.onload = function() {
+            const result = JSON.parse(this.response);
+            console.log(this.response);
+            console.log(result);
+
+            for(let i = 0; i < 45; ++i) {
+                if(result[i][2] == "second"){
+                    let temp = [];
+                    temp.push(result[i][0]);
+                    if(result[i][1].toString().includes("2")) {
+                        temp.push("۲۰۰۰۰۰ تومان");
+                    }
+                    else {
+                        if(result[i][1].toString().includes("5")) {
+                            temp.push("۱۵۰۰۰۰ تومان");
+
+
+                        }
+                        else {
+                            if(result[i][1].toString().includes("7")) {
+                                temp.push("۱۷۰۰۰۰ تومان");
+
+
+
+                            }
+                        }}
+
+                    if(result[i][2] == "first") {
+                        temp.push("دسته بندی یک")
+
+                    }
+                    if(result[i][2] == "second") {
+                        temp.push("دسته بندی دو")
+
+                    }
+                    if(result[i][2] == "third") {
+                        temp.push("دسته بندی سه")
+
+                    }
+
+
+                    if (result[i][3].includes("mountain_climbing_bag")) {
+                        temp.push("کوله پشتی کوه نوردی");
+                    }
+                    let template = temp[1];
+                    temp[1] = temp[3];
+                    temp[3] = template;
+                    products_array.push(temp);
+
+                }
+
+            }
+            slides_show();
+            products_renderer(current_page);
+            paging_controller();
+
+        }
+        xhttp.open("POST", link);
+        xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+        xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+        xhttp.setRequestHeader("Usecase", "GetProduct");
+        xhttp.setRequestHeader("BaseName", "price"); // or pictureAddress or Category_name
+        xhttp.setRequestHeader("SortType", "0"); // or 1
+        xhttp.send();
+
+    }
+    if(third_category_element.checked) {
+        let link = "http://127.0.0.1:9950/main/";
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", link);
+
+        xhttp.onload = function() {
+            const result = JSON.parse(this.response);
+            console.log(this.response);
+            console.log(result);
+
+            for(let i = 0; i < 45; ++i) {
+                if(result[i][2] == "third"){
+                    let temp = [];
+                    temp.push(result[i][0]);
+                    if(result[i][1].toString().includes("2")) {
+                        temp.push("۲۰۰۰۰۰ تومان");
+                    }
+                    else {
+                        if(result[i][1].toString().includes("5")) {
+                            temp.push("۱۵۰۰۰۰ تومان");
+
+
+                        }
+                        else {
+                            if(result[i][1].toString().includes("7")) {
+                                temp.push("۱۷۰۰۰۰ تومان");
+
+
+
+                            }
+                        }}
+
+                    if(result[i][2] == "first") {
+                        temp.push("دسته بندی یک")
+
+                    }
+                    if(result[i][2] == "second") {
+                        temp.push("دسته بندی دو")
+
+                    }
+                    if(result[i][2] == "third") {
+                        temp.push("دسته بندی سه")
+
+                    }
+
+
+                    if (result[i][3].includes("mountain_climbing_bag")) {
+                        temp.push("کوله پشتی کوه نوردی");
+                    }
+                    let template = temp[1];
+                    temp[1] = temp[3];
+                    temp[3] = template;
+                    products_array.push(temp);
+
+                }
+
+            }
+            slides_show();
+            products_renderer(current_page);
+            paging_controller();
+
+        }
+        xhttp.open("POST", link);
+        xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+        xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+        xhttp.setRequestHeader("Usecase", "GetProduct");
+        xhttp.setRequestHeader("BaseName", "price"); // or pictureAddress or Category_name
+        xhttp.setRequestHeader("SortType", "0"); // or 1
+        xhttp.send();
+
+
+
+
+    }
+    if(forth_category_element.checked) {
+        let link = "http://127.0.0.1:9950/main/";
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", link);
+
+        xhttp.onload = function() {
+            const result = JSON.parse(this.response);
+            console.log(this.response);
+            console.log(result);
+
+            for(let i = 0; i < 45; ++i) {
+                if(result[i][2] == "forth"){
+                    let temp = [];
+                    temp.push(result[i][0]);
+                    if(result[i][1].toString().includes("2")) {
+                        temp.push("۲۰۰۰۰۰ تومان");
+                    }
+                    else {
+                        if(result[i][1].toString().includes("5")) {
+                            temp.push("۱۵۰۰۰۰ تومان");
+
+
+                        }
+                        else {
+                            if(result[i][1].toString().includes("7")) {
+                                temp.push("۱۷۰۰۰۰ تومان");
+
+
+
+                            }
+                        }}
+
+                    if(result[i][2] == "first") {
+                        temp.push("دسته بندی یک")
+
+                    }
+                    if(result[i][2] == "second") {
+                        temp.push("دسته بندی دو")
+
+                    }
+                    if(result[i][2] == "third") {
+                        temp.push("دسته بندی سه")
+
+                    }
+
+
+                    if (result[i][3].includes("mountain_climbing_bag")) {
+                        temp.push("کوله پشتی کوه نوردی");
+                    }
+                    let template = temp[1];
+                    temp[1] = temp[3];
+                    temp[3] = template;
+                    products_array.push(temp);
+
+                }
+
+            }
+            slides_show();
+            products_renderer(current_page);
+            paging_controller();
+
+        }
+        xhttp.open("POST", link);
+        xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+        xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+        xhttp.setRequestHeader("Usecase", "GetProduct");
+        xhttp.setRequestHeader("BaseName", "price"); // or pictureAddress or Category_name
+        xhttp.setRequestHeader("SortType", "0"); // or 1
+        xhttp.send();
+
+    }
+    if(!first_category_element.checked && !second_category_element.checked && !third_category_element.checked && !forth_category_element.checked) {
+        get_products();
+
+    }
+
+
+
+
+
+
+
+    products_renderer(current_page);
+    paging_controller();
+
+}
+
 
 function products_renderer(page_number) {
-    if ((page_number - 1) * number_of_products_in_each_page < 45) {
+    if ((page_number - 1) * number_of_products_in_each_page < products_array.length) {
         let needed_products = [];
         for(let i = (page_number - 1) * number_of_products_in_each_page; i < page_number * number_of_products_in_each_page; ++ i) {
             needed_products.push(products_array[i]);
