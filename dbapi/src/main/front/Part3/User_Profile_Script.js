@@ -1,4 +1,66 @@
 let current_tab = "profile_button";
+console.log(window.localStorage.getItem("authToken"))
+showResultForGetUserInfo()
+async function showResultForGetUserInfo() {
+    let link = "http://127.0.0.1:9950/main/"
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
+    let address = document.getElementById('register_address');
+    let first_name = document.getElementById('register_first_name');
+    let last_name = document.getElementById('register_last_name');
+    let cash = document.getElementById('cash');
+    let welcomeName = document.getElementById('welcomeName');
+    let username = document.getElementById('username');
+    let drobptn = document.getElementById('drobptn');
+
+    xhttp.onload = function() {
+        const result = JSON.parse(this.response);
+        if(parseInt(result.authToken) > 0)
+        {
+            address.placeholder = result.address
+            first_name.placeholder = result.firstname
+            last_name.placeholder = result.lastname
+            cash.innerText = result.charge
+            welcomeName.innerText = result.firstname
+            username.innerText = result.firstname
+            drobptn.innerText = result.firstname
+        }
+        console.log(this.response)
+    }
+
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "Getuserinfo");
+    xhttp.setRequestHeader("AuthToken", window.localStorage.getItem("authToken"));
+
+    xhttp.send();
+
+}
+
+async function charge()
+{
+    let link = "http://127.0.0.1:9950/main/"
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
+    xhttp.onload = function() {
+        showResultForGetUserInfo()
+    }
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "Chargemoney");
+    xhttp.setRequestHeader("AuthToken", window.localStorage.getItem("authToken"));
+    xhttp.send();
+}
+
+
+async function logout()
+{
+    window.localStorage.setItem("authToken","0")
+    window.location.href = "../Part1/main_page.html"
+}
+
 function tabs_handler() {
     document.getElementById("main_div2").style.display = "none";
 
@@ -69,8 +131,6 @@ const error_type =
     };
 
 declare_type = [];
-const emails = {'amir@aut.ac.ir' : '1234567A', 'ahmad@gmail.com' : 'ALI1234512345',
-    'iran@iran.co' : 'Iran9090', 'yhn@aut.co': 'iraniran0'};
 
 function clear_value_from_white_space(target)
 {
@@ -233,10 +293,7 @@ function load_modal(target) {
     content_cell.innerHTML = "";
     content_cell.setAttribute('class', 'modal_content_class');
 
-    if(target.id == "login_button")
-        is_basic_check_successfull = create_login_modal_content();
-    else
-        is_basic_check_successfull = create_register_modal_content();
+    is_basic_check_successfull = create_register_modal_content();
 
     if(is_basic_check_successfull)
     {
@@ -251,62 +308,56 @@ function load_modal(target) {
 
 function create_register_modal_content()
 {
-    input_checker('register_first_name', "name")
-    input_checker('register_last_name', "name")
-    input_checker('register_email', "email")
-    input_checker('register_password', "pass")
-    input_checker('register_address', "address")
-    for (const val in declare_type)
-        if (declare_type[val] != error_type.GREEN_STATE)
-            return false;
-    let email = document.getElementById('register_email').value;
+    let password = document.getElementById('register_password').value;
+    let address = document.getElementById('register_address').value;
+    let first_name = document.getElementById('register_first_name').value;
+    let last_name = document.getElementById('register_last_name').value;
+
     let content_cell = document.getElementById('modal_content');
 
-    if(typeof emails[email] === 'undefined')
-    {
-        content_cell.innerText = "این ایمیل قبلا ثبت نشده است."
-        content_cell.style.color = "red"
-    }
-    else
-    {
+    showResultForChangeInfo(password, first_name, last_name, address, content_cell)
 
-        content_cell.innerText = "ویرایش اطلاعات با موفقیت انجام شد."
-        content_cell.style.color = "green"
-
-    }
 
     return true;
 }
 
-function create_login_modal_content()
-{
-    input_checker('login_email', "email")
-    input_checker('login_password', "pass")
-    for (const val in declare_type)
-        if (declare_type[val] != error_type.GREEN_STATE)
-            return false;
+async function showResultForChangeInfo(password, firstname, lastname, address, content_cell) {
+    let link = "http://127.0.0.1:9950/main/"
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
 
-    let email = document.getElementById('login_email').value;
-    let password = document.getElementById('login_password').value;
-    let content_cell = document.getElementById('modal_content');
-
-    if(typeof emails[email] === 'undefined')
-    {
-        content_cell.innerText = "این ایمیل ثبت نشده است."
-        content_cell.style.color = "red"
-    }
-    else if(emails[email] == password)
-    {
-        content_cell.innerText = "ورود با موفقیت انجام شد."
-        content_cell.style.color = "green"
-    }
-    else
-    {
-        content_cell.innerText = "رمز عبور نادرست است."
-        content_cell.style.color = "red"
+    xhttp.onload = function() {
+        const result = JSON.parse(this.response);
+        console.log(this.response)
+        if(parseInt(result.authToken) > 0)
+        {
+            content_cell.innerText = "تغییرات با موفقیت اعمال شد."
+            content_cell.style.color = "green"
+        }
+        else
+        {
+            content_cell.innerText = "تغییرات اعمال نشد."
+            content_cell.style.color = "red"
+        }
+        showResultForGetUserInfo()
     }
 
-    return true;
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "changeinfo");
+    if(password.length > 0)
+        xhttp.setRequestHeader("Password", password);
+    if(firstname.length > 0)
+        xhttp.setRequestHeader("Firstname", firstname);
+    if(lastname.length > 0)
+            xhttp.setRequestHeader("Lastname", lastname);
+    if(address.length > 0)
+            xhttp.setRequestHeader("Address", address);
+    xhttp.setRequestHeader("AuthToken", window.localStorage.getItem("authToken"));
+
+    xhttp.send();
+
 }
 
 window.onclick = function(event) {
