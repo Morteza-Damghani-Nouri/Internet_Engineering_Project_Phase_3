@@ -235,6 +235,52 @@ function slider_image_back() {
 
 }
 
+async function gotoProfile()
+{
+    window.location.href = "../Part3/Profile_Bills.html"
+}
+
+async function gotoLogin()
+{
+    window.location.href = "../Part2/login_page.html"
+}
+
+showResultForGetUserInfo()
+async function showResultForGetUserInfo() {
+    let link = "http://127.0.0.1:9950/main/"
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
+    let loginStat = document.getElementById('loginStat');
+    let menu_button = document.getElementById('menu_button');
+    let drobptn = document.getElementById('drobptn');
+
+    xhttp.onload = function() {
+        const result = JSON.parse(this.response);
+        if(parseInt(result.authToken) > 0)
+        {
+            drobptn.innerText = result.firstname
+            loginStat.style.display = "inline-block"
+            menu_button.style.display = "none"
+        }
+        console.log(this.response)
+    }
+
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "Getuserinfo");
+    xhttp.setRequestHeader("AuthToken", window.localStorage.getItem("authToken"));
+
+    xhttp.send();
+
+}
+
+async function logout()
+{
+    window.localStorage.setItem("authToken","0")
+    window.location.href = "../Part1/main_page.html"
+}
+
 function slider_image_next() {
 
     if(image_counter == 0){
