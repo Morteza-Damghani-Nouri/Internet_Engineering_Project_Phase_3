@@ -235,13 +235,49 @@ public class AdminTasks {
 //        addProduct(productAsMap);
 //        removeProduct("Ahmad");
         boolean x1 = addCategory("first");
-        HashMap<String, String> product = new HashMap<>();
-        product.put("name","Ice1");
-        product.put("price","150");
-        product.put("pictureAddress", "Images/bag0.png");
-        product.put("category_name", "first");
+        x1 = addCategory("second");
+        x1 = addCategory("third");
+
+        for(int i = 0; i < 45; ++i) {
+            HashMap<String, String> product = new HashMap<>();
+            if(i < 15) {
+                product.put("name", "mountain_climbing_bag " + String.valueOf(i));
+                product.put("price","150000");
+                product.put("pictureAddress", "Images/bag0.png");
+                product.put("category_name", "first");
+
+            }
+            else {
+                if(i < 30) {
+                    product.put("name", "mountain_climbing_bag " + String.valueOf(i));
+                    product.put("price","170000");
+                    product.put("pictureAddress", "Images/bag1.png");
+                    product.put("category_name", "second");
+                }
+                else {
+
+                    product.put("name", "mountain_climbing_bag " + String.valueOf(i));
+                    product.put("price","200000");
+                    product.put("pictureAddress", "Images/bag2.png");
+                    product.put("category_name", "third");
+
+                }
+
+            }
+
+
+
+
+
         boolean x2 = addProduct(product);
         System.out.println(x1);
         System.out.println(x2);
     }
 }
+
+
+
+
+}
+
+

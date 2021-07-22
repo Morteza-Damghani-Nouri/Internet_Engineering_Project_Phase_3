@@ -2,29 +2,86 @@ let image_counter = 0;
 let products_array = [];
 let number_of_products_in_each_page = 15;
 let current_page = 1;
-console.log(window.localStorage.getItem("authToken"))
+console.log(window.localStorage.getItem("authToken"));
 
-get_products()
 
-async function get_products()
+
+function get_products()
 {
-        let link = "http://127.0.0.1:9950/main/"
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("GET", link);
+    let link = "http://127.0.0.1:9950/main/";
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", link);
 
-        xhttp.onload = function() {
-            const result = JSON.parse(this.response);
-            console.log(this.response)
-            console.log(result)
+    xhttp.onload = function() {
+        const result = JSON.parse(this.response);
+        console.log(this.response);
+        console.log(result);
+
+        for(let i = 0; i < 45; ++i) {
+            let temp = [];
+            temp.push(result[i][0]);
+            if(result[i][1].toString().includes("2")) {
+                temp.push("۲۰۰۰۰۰ تومان");
+            }
+            else {
+                if(result[i][1].toString().includes("5")) {
+                    temp.push("۱۵۰۰۰۰ تومان");
+
+
+                }
+                else {
+                    if(result[i][1].toString().includes("7")) {
+                        temp.push("۱۷۰۰۰۰ تومان");
+
+
+
+                }
+            }}
+
+            if(result[i][2] == "first") {
+                temp.push("دسته بندی یک")
+
+            }
+            if(result[i][2] == "second") {
+                temp.push("دسته بندی دو")
+
+            }
+            if(result[i][2] == "third") {
+                temp.push("دسته بندی سه")
+
+            }
+
+
+
+
+
+
+
+
+
+            if (result[i][3].includes("mountain_climbing_bag")) {
+                temp.push("کوله پشتی کوه نوردی");
+            }
+            let template = temp[1];
+            temp[1] = temp[3];
+            temp[3] = template;
+            console.log(temp);
+            products_array.push(temp);
+
         }
-        xhttp.open("POST", link);
-        xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
-        xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
-        xhttp.setRequestHeader("Usecase", "GetProduct");
-        xhttp.setRequestHeader("BaseName", "name"); // or pictureAddress or Category_name
-        xhttp.setRequestHeader("SortType", "0"); // or 1
+        slides_show();
+        products_renderer(current_page);
+        paging_controller();
 
-        xhttp.send();
+    }
+    xhttp.open("POST", link);
+    xhttp.setRequestHeader('Access-Control-Allow-Origin', link);
+    xhttp.setRequestHeader('Access-Control-Allow-Credentials', 'true');
+    xhttp.setRequestHeader("Usecase", "GetProduct");
+    xhttp.setRequestHeader("BaseName", "name"); // or pictureAddress or Category_name
+    xhttp.setRequestHeader("SortType", "0"); // or 1
+    xhttp.send();
+
 
 }
 
@@ -106,108 +163,6 @@ function paging_controller() {
 
 }
 
-
-
-function products_array_generator() {
-    let product1 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product1);
-    let product2 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product2);
-    let product3 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product3);
-    let product4 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product4);
-    let product5 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product5);
-    let product6 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product6);
-    let product7 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product7);
-    let product8 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product8);
-    let product9 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product9);
-    let product10 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product10);
-    let product11 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product11);
-    let product12 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product12);
-    let product13 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product13);
-    let product14 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product14);
-    let product15 = ["Images/bag0.png","کوله پشتی کوه نوردی", "دسته بندی یک", "۱۵۰۰۰۰ تومان"];
-    products_array.push(product15);
-    let product16 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product16);
-    let product17 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product17);
-    let product18 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product18);
-    let product19 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product19);
-    let product20 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product20);
-    let product21 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product21);
-    let product22 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product22);
-    let product23 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product23);
-    let product24 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product24);
-    let product25 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product25);
-    let product26 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product26);
-    let product27 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product27);
-    let product28 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product28);
-    let product29 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product29);
-    let product30 = ["Images/bag1.png","کوله پشتی کوه نوردی", "دسته بندی دو", "۱۷۰۰۰۰ تومان"];
-    products_array.push(product30);
-    let product31 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product31);
-    let product32 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product32);
-    let product33 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product33);
-    let product34 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product34);
-    let product35 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product35);
-    let product36 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product36);
-    let product37 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product37);
-    let product38 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product38);
-    let product39 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product39);
-    let product40 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product40);
-    let product41 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product41);
-    let product42 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product42);
-    let product43 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product43);
-    let product44 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product44);
-    let product45 = ["Images/bag2.png","کوله پشتی کوه نوردی", "دسته بندی سه", "۲۰۰۰۰۰ تومان"];
-    products_array.push(product45);
-    slides_show();
-    paging_controller();
-
-
-
-
-
-
-}
 
 function products_renderer(page_number) {
     if ((page_number - 1) * number_of_products_in_each_page < 45) {
@@ -374,7 +329,4 @@ function onmouseleave_handler(element) {
 
 
 }
-
-
-
 

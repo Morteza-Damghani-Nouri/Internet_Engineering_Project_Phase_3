@@ -89,7 +89,6 @@ class MyHandler implements HttpHandler {
             a.append(String.valueOf(counter),row.toDocument());
             counter += 1;
         }
-        out.println("adkklwqjdf");
         out.println(a.toJson());
         return a.toJson();
     }
@@ -194,6 +193,7 @@ class MyHandler implements HttpHandler {
         String response;
         response = MyHandler.parseHeaders(hashMap);
         t.sendResponseHeaders(200, response.length());
+        out.println(response.length());
         OutputStream os = t.getResponseBody();
         out.println(response);
         os.write(response.getBytes());
